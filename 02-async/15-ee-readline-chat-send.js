@@ -1,0 +1,11 @@
+const readline = require('readline');
+const http = require('http');
+const querystring = require('querystring');
+
+const rl = readline.createInterface({ input: process.stdin });
+
+rl.on('line', line => http.get(`http://localhost:1337/chat?${querystring.stringify({ message: line })}`));
+
+http.get('http://localhost:1337/sse', res => {
+    res.on('data', data => console.log(data.toString()));
+})
