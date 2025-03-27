@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 
+
 const api = require('./api')
 const middleware = require('./middleware')
 const auth = require('./auth')
@@ -10,6 +11,8 @@ const port = process.env.PORT || 1337
 
 const app = express()
 
+app.use(middleware.logger)
+app.use(middleware.csrf)
 app.use(middleware.cors)
 app.use(bodyParser.json())
 app.use(cookieParser())
@@ -26,6 +29,8 @@ app.post('/orders', auth.ensureUser, api.createOrder)
 
 app.post('/users', api.createUser);
 app.get('/users', auth.ensureUser, api.listUsers);
+
+//app.get('/health', api.checkHealth)
 
 app.use(middleware.handleError)
 app.use(middleware.notFound)

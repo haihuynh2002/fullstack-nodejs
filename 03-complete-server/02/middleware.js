@@ -1,4 +1,6 @@
 const http = require('http')
+const pinoNoir = require('pino-noir')
+const pinoLogger = require('express-pino-logger')
 
 function cors(req, res, next) {
   const origin = req.headers.origin;
@@ -18,6 +20,11 @@ function cors(req, res, next) {
   next();
 }
 
+function csrf(req, res, next) {
+  res.cookie('SameSite', 'Strict');
+  next();
+}
+
 function handleError(err, req, res, next) {
     console.error(err);
     if(res.headersSent) return next(err);
@@ -31,8 +38,20 @@ function notFound(req, res) {
     res.status(404).json({ error: 'Not Found' });
 }
 
+function logger () {
+  return pinoLogger({
+    serializers: pinoNoir([
+      'res.headers.set-cookie',
+      'req.headers.cookie',
+      'req.headers.authorization'
+    ])
+  })
+}
+
 module.exports = {
+  logger: logger(),
   cors,
+  csrf,
   handleError,
   notFound
 }
