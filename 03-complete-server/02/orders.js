@@ -39,9 +39,10 @@ function emailSchema(opts = {}) {
 }
 
 async function list(opts = {}) {
-    const {limit, offset} = opts;
-
-    const order = await Order.find({})
+    const {limit, offset, productId, status, buyerEmail} = opts;
+    const order = await Order.find({
+        buyerEmail
+    })
     .sort({ _id: 1 })
     .skip(offset)
     .limit(limit)

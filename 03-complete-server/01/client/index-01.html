@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html leng="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fullstack Print</title>
+    </head>
+    <body>
+        <script>
+            fetch('http://localhost:1337/products')
+            .then(res => res.json())
+            .then(console.log)
+            .catch(err => console.log);
+        </script>
+    </body>
+</html>
